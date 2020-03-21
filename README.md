@@ -29,7 +29,7 @@ If a card inside the stack has the `--keep-background` CSS style defined, it wil
 
 ### Simple Example
 
-![example](./docs/Example.png)
+![example](docs/Example.png)
 
 ```yaml
 - type: custom:stack-in-card

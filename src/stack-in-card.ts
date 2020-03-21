@@ -1,11 +1,11 @@
-import { CARD_VERSION } from './version-const';
 import { LitElement, customElement, property, TemplateResult, html } from 'lit-element';
 import { ifDefined } from 'lit-html/directives/if-defined';
 import { HomeAssistant, LovelaceCardConfig, createThing, LovelaceCard } from 'custom-card-helpers';
 import { StackInCardConfig } from './types';
+import * as pjson from '../package.json';
 
 console.info(
-  `%c STACK-IN-CARD \n%c   Version ${CARD_VERSION}   `,
+  `%c STACK-IN-CARD \n%c   Version ${pjson.version}   `,
   'color: orange; font-weight: bold; background: black',
   'color: white; font-weight: bold; background: dimgray',
 );
