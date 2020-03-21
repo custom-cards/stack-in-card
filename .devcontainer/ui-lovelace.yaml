@@ -1,0 +1,20 @@
+resources:
+  - url: http://127.0.0.1:5000/stack-in-card.js
+    type: module
+views:
+  - cards:
+      - type: custom:stack-in-card
+        title: My Stack In Card
+        mode: vertical
+        cards:
+          - type: horizontal-stack
+            cards:
+              - type: button
+                entity: sun.sun
+              - type: button
+                entity: sun.sun
+          - type: vertical-stack
+            cards:
+              - type: entities
+                entities:
+                  - sun.sun
