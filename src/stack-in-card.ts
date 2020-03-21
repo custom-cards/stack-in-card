@@ -1,5 +1,5 @@
 import { CARD_VERSION } from './version-const';
-import { LitElement, customElement, property, TemplateResult, html, PropertyValues, CSSResult, css } from 'lit-element';
+import { LitElement, customElement, property, TemplateResult, html } from 'lit-element';
 import { ifDefined } from 'lit-html/directives/if-defined';
 import { HomeAssistant, LovelaceCardConfig, createThing, LovelaceCard } from 'custom-card-helpers';
 import { StackInCardConfig } from './types';
