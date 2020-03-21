@@ -1,8 +1,19 @@
 resources:
   - url: http://127.0.0.1:5000/stack-in-card.js
     type: module
+  - url: https://cdn.jsdelivr.net/gh/thomasloven/lovelace-card-mod@master/card-mod.js
+    type: module
 views:
   - cards:
+      - type: entities
+        style: |
+          ha-card {
+            --ha-card-background: rgb(0,100,182);
+            color: rgb(217,242,251);
+            --keep-background: true;
+          }
+        entities:
+          - type: divider
       - type: custom:stack-in-card
         title: My Stack In Card
         mode: vertical
@@ -13,6 +24,15 @@ views:
                 entity: sun.sun
               - type: button
                 entity: sun.sun
+          - type: entities
+            style: |
+              ha-card {
+                --ha-card-background: rgb(255,100,182);
+                color: rgb(217,242,251);
+                --keep-background: true;
+              }
+            entities:
+              - type: divider
           - type: vertical-stack
             cards:
               - type: entities

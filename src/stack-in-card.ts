@@ -1,5 +1,5 @@
 import { CARD_VERSION } from './version-const';
-import { LitElement, customElement, property, TemplateResult, html } from 'lit-element';
+import { LitElement, customElement, property, TemplateResult, html, PropertyValues, CSSResult, css } from 'lit-element';
 import { ifDefined } from 'lit-html/directives/if-defined';
 import { HomeAssistant, LovelaceCardConfig, createThing, LovelaceCard } from 'custom-card-helpers';
 import { StackInCardConfig } from './types';
@@ -15,7 +15,7 @@ const HELPERS = (window as any).loadCardHelpers ? (window as any).loadCardHelper
 
 @customElement('stack-in-card')
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-class StackInCard extends LitElement {
+class StackInCard extends LitElement implements LovelaceCard {
   @property() protected _card?: LovelaceCard;
 
   @property() private _config?: StackInCardConfig;
@@ -31,7 +31,7 @@ class StackInCard extends LitElement {
 
   public setConfig(config: StackInCardConfig): void {
     if (!config.cards) {
-      throw new Error(`There is no card parameter defined`);
+      throw new Error(`There is no cards parameter defined`);
     }
     this._config = {
       mode: 'vertical',
@@ -42,7 +42,10 @@ class StackInCard extends LitElement {
       cards: this._config.cards,
     }).then(card => {
       this._card = card;
-      this._waitForChildren(this._card);
+      this._waitForChildren(card, false);
+      window.setTimeout(() => {
+        this._waitForChildren(card, true);
+      }, 500);
     });
   }
 
@@ -58,51 +61,56 @@ class StackInCard extends LitElement {
     `;
   }
 
-  private _updateStyle(e: LovelaceCard | null): void {
+  private _updateStyle(e: LovelaceCard | null, withBg: boolean): void {
     if (!e) return;
     e.style.boxShadow = 'none';
-    if (getComputedStyle(e).getPropertyValue('--keep-background') !== 'true') {
+    if (
+      withBg &&
+      getComputedStyle(e)
+        .getPropertyValue('--keep-background')
+        .trim() !== 'true'
+    ) {
       e.style.background = 'transparent';
     }
     e.style.borderRadius = '0';
   }
 
-  private _loopChildren(e: LovelaceCard): void {
+  private _loopChildren(e: LovelaceCard, withBg: boolean): void {
     const searchElements = e.childNodes;
     searchElements.forEach(childE => {
       if ((childE as LovelaceCard).style) {
         (childE as LovelaceCard).style.margin = '0px';
       }
-      this._waitForChildren(childE as LovelaceCard);
+      this._waitForChildren(childE as LovelaceCard, withBg);
     });
   }
 
-  private _updateChildren(element: LovelaceCard | undefined): void {
+  private _updateChildren(element: LovelaceCard | undefined, withBg: boolean): void {
     if (!element) return;
     if (element.shadowRoot) {
       const card = element.shadowRoot.querySelector('ha-card') as LovelaceCard;
       if (!card) {
         const searchEles = element.shadowRoot.getElementById('root') || element.shadowRoot.getElementById('card');
         if (!searchEles) return;
-        this._loopChildren(searchEles as LovelaceCard);
+        this._loopChildren(searchEles as LovelaceCard, withBg);
       } else {
-        this._updateStyle(card);
+        this._updateStyle(card, withBg);
       }
     } else {
       if (typeof element.querySelector === 'function' && element.querySelector('ha-card')) {
-        this._updateStyle(element.querySelector('ha-card'));
+        this._updateStyle(element.querySelector('ha-card'), withBg);
       }
-      this._loopChildren(element as LovelaceCard);
+      this._loopChildren(element as LovelaceCard, withBg);
     }
   }
 
-  private _waitForChildren(element: LovelaceCard | undefined): void {
+  private _waitForChildren(element: LovelaceCard | undefined, withBg: boolean): void {
     if (((element as unknown) as LitElement).updateComplete) {
       ((element as unknown) as LitElement).updateComplete.then(() => {
-        this._updateChildren(element);
+        this._updateChildren(element, withBg);
       });
     } else {
-      this._updateChildren(element);
+      this._updateChildren(element, withBg);
     }
   }
 
@@ -116,20 +124,24 @@ class StackInCard extends LitElement {
     if (this._hass) {
       element.hass = this._hass;
     }
-    element.addEventListener(
-      'll-rebuild',
-      ev => {
-        ev.stopPropagation();
-        this._rebuildCard(element, config);
-      },
-      { once: true },
-    );
+    if (element) {
+      element.addEventListener(
+        'll-rebuild',
+        ev => {
+          ev.stopPropagation();
+          this._rebuildCard(element, config);
+        },
+        { once: true },
+      );
+    }
     return element;
   }
 
   private async _rebuildCard(element: LovelaceCard, config: LovelaceCardConfig): Promise<LovelaceCard> {
     const newCard = await this._createCard(config);
     element.replaceWith(newCard);
+    this._card = newCard;
+    this._waitForChildren(this._card, true);
     return newCard;
   }
 
