@@ -7,12 +7,12 @@
     "pre-commit"
   ],
   "scripts": {
-    "pre-commit": "./hooks/pre-commit.sh",
-    "build": "npm run lint && npm run rollup && npm run babel",
+    "pre-commit": "npm run build",
+    "build": "npm run update-version && npm run lint && npm run rollup && npm run babel",
     "rollup": "rollup -c",
     "babel": "babel dist/stack-in-card.js --out-file dist/stack-in-card.js",
     "lint": "eslint src/*.ts",
-    "start": "rollup -c --watch",
+    "start": "npm run update-version && rollup -c --watch",
     "update-version": "./hooks/bump-version.sh"
   },
   "repository": {
