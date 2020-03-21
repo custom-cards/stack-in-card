@@ -1,6 +1,6 @@
 {
   "name": "stack-in-card",
-  "version": "0.0.2-1",
+  "version": "0.0.2",
   "description": "Stack in Card for Home Assistant's Lovelace UI",
   "main": "dist/stack-in-card.js",
   "pre-commit": [
