@@ -12,7 +12,7 @@ It allows to group multiple cards into one card without the borders. By default,
 [![GitHub Activity][commits-shield]][commits]
 
 [![Discord][discord-shield]][discord]
-<!-- [![Community Forum][forum-shield]][forum] -->
+[![Community Forum][forum-shield]][forum]
 
 ## Options
 
@@ -82,7 +82,7 @@ resources:
 [discord]: https://discord.gg/5e9yvq
 [discord-shield]: https://img.shields.io/discord/330944238910963714.svg?style=for-the-badge
 [forum-shield]: https://img.shields.io/badge/community-forum-brightgreen.svg?style=for-the-badge
-<!-- [forum]: https://community.home-assistant.io/c/projects/frontend -->
+[forum]: https://community.home-assistant.io/t/stack-in-card-drop-in-replacement-for-vertical-stack-in-card/180072
 [license-shield]: https://img.shields.io/github/license/custom-cards/stack-in-card.svg?style=for-the-badge
 [maintenance-shield]: https://img.shields.io/maintenance/yes/2020.svg?style=for-the-badge
 [releases-shield]: https://img.shields.io/github/release/custom-cards/stack-in-card.svg?style=for-the-badge
