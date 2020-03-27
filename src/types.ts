@@ -13,4 +13,5 @@ export interface KeepConfig {
   background?: boolean;
   box_shadow?: boolean;
   border_radius?: boolean;
+  outer_padding?: boolean;
 }

@@ -33,6 +33,7 @@ If a card inside the stack has the `--keep-background` CSS style defined, it wil
 | `background` | boolean | **Optional** | Will keep the background on **all** the child cards. To keep the background on specific cards only, assign the CSS variable `--keep-background: 'true'` on the card where you want to keep the background.  | `false` |
 | `box_shadow` | boolean | **Optional** | Will keep the `box-shadow` on **all** the child cards | `false` |
 | `margin` | boolean | **Optional** | Will keep the `margin` between **all** the child cards | `false` |
+| `outer_padding` | boolean | **Optional** | Will add a `padding` of `8px` to the card if `margin` is `true` | `true` if `margin` is `true`, else false |
 | `border_radius` | boolean | **Optional** | Will keep the `border-radius` on **all** the child cards | `false` |
 
 ## Example

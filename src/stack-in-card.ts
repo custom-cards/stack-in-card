@@ -29,6 +29,14 @@ class StackInCard extends LitElement implements LovelaceCard {
     }
   }
 
+  static get styles(): CSSResult {
+    return css`
+      ha-card {
+        overflow: hidden;
+      }
+    `;
+  }
+
   public setConfig(config: StackInCardConfig): void {
     if (!config.cards) {
       throw new Error(`There is no cards parameter defined`);
@@ -44,6 +52,8 @@ class StackInCard extends LitElement implements LovelaceCard {
         ...config.keep,
       },
     };
+    if (this._config.keep?.margin && this._config.keep?.outer_padding === undefined)
+      this._config.keep.outer_padding = true;
     this._createCard({
       type: `${this._config.mode}-stack`,
       cards: this._config.cards,
@@ -52,7 +62,7 @@ class StackInCard extends LitElement implements LovelaceCard {
       this._waitForChildren(card, false);
       window.setTimeout(() => {
         if (!this._config?.keep?.background) this._waitForChildren(card, true);
-        if (this._config?.keep?.margin && this._card?.shadowRoot) {
+        if (this._config?.keep?.outer_padding && this._card?.shadowRoot) {
           const stackRoot = this._card.shadowRoot.getElementById('root');
           if (stackRoot) stackRoot.style.padding = '8px';
         }
@@ -155,7 +165,13 @@ class StackInCard extends LitElement implements LovelaceCard {
     const newCard = await this._createCard(config);
     element.replaceWith(newCard);
     this._card = newCard;
-    this._waitForChildren(this._card, true);
+    window.setTimeout(() => {
+      if (!this._config?.keep?.background) this._waitForChildren(this._card, true);
+      if (this._config?.keep?.outer_padding && this._card?.shadowRoot) {
+        const stackRoot = this._card.shadowRoot.getElementById('root');
+        if (stackRoot) stackRoot.style.padding = '8px';
+      }
+    }, 500);
     return newCard;
   }
 

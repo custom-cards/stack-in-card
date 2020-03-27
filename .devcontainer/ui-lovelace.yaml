@@ -14,18 +14,19 @@ views:
           margin: true
           border_radius: true
           background: true
+          outer_padding: true
         title: test
         cards:
           - type: custom:stack-in-card
             keep:
               margin: true
-              box_shadow: false
-              background: false
+              outer_padding: false
+              border_radius: false
             cards:
               - type: custom:button-card
-                entity: sun.sun
+                entity: switch.decorative_lights
                 color_type: card
-                color: white
+                # color: white
                 # styles:
                 #   card:
                 #     - --keep-background: "true"
@@ -50,9 +51,6 @@ views:
                 color_type: card
                 color: yellow
                 color_off: rgb(245, 245, 245)
-                # styles:
-                #   card:
-                #     - --keep-background: "true"
       - type: entities
         style: |
           ha-card {
