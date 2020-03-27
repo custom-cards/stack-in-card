@@ -3,8 +3,56 @@ resources:
     type: module
   - url: https://cdn.jsdelivr.net/gh/thomasloven/lovelace-card-mod@master/card-mod.js
     type: module
+  - url: http://127.0.0.1:5000/button-card.js
+    type: module
 views:
   - cards:
+      - type: custom:stack-in-card
+        mode: horizontal
+        keep:
+          box_shadow: true
+          margin: true
+          border_radius: true
+          background: true
+        title: test
+        cards:
+          - type: custom:stack-in-card
+            keep:
+              margin: true
+              box_shadow: false
+              background: false
+            cards:
+              - type: custom:button-card
+                entity: sun.sun
+                color_type: card
+                color: white
+                # styles:
+                #   card:
+                #     - --keep-background: "true"
+              - type: custom:button-card
+                entity: sun.sun
+                color_type: card
+                color: white
+                # styles:
+                #   card:
+                #     - --keep-background: "true"
+          - type: vertical-stack
+            cards:
+              - type: custom:button-card
+                entity: sun.sun
+                color_type: card
+                color: white
+                styles:
+                  card:
+                    - --keep-background: "true"
+              - type: custom:button-card
+                entity: sun.sun
+                color_type: card
+                color: yellow
+                color_off: rgb(245, 245, 245)
+                # styles:
+                #   card:
+                #     - --keep-background: "true"
       - type: entities
         style: |
           ha-card {

@@ -2,3 +2,10 @@ default_config:
 lovelace:
   mode: yaml
 demo:
+
+frontend:
+  themes:
+    test:
+      background-color: "#F7F8F9"
+      border-color: "#E8E8E8"
+      ha-card-box-shadow: "inset 0px 0px 0px 1px var(--border-color)"

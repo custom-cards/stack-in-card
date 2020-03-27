@@ -5,4 +5,12 @@ export interface StackInCardConfig {
   mode: 'horizontal' | 'vertical';
   cards: LovelaceCardConfig[];
   title?: string;
+  keep?: KeepConfig;
+}
+
+export interface KeepConfig {
+  margin?: boolean;
+  background?: boolean;
+  box_shadow?: boolean;
+  border_radius?: boolean;
 }

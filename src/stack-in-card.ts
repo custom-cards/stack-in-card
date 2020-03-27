@@ -1,4 +1,4 @@
-import { LitElement, customElement, property, TemplateResult, html } from 'lit-element';
+import { LitElement, customElement, property, TemplateResult, html, css, CSSResult } from 'lit-element';
 import { ifDefined } from 'lit-html/directives/if-defined';
 import { HomeAssistant, LovelaceCardConfig, createThing, LovelaceCard } from 'custom-card-helpers';
 import { StackInCardConfig } from './types';
@@ -36,6 +36,13 @@ class StackInCard extends LitElement implements LovelaceCard {
     this._config = {
       mode: 'vertical',
       ...config,
+      keep: {
+        background: false,
+        margin: false,
+        box_shadow: false,
+        border_radius: false,
+        ...config.keep,
+      },
     };
     this._createCard({
       type: `${this._config.mode}-stack`,
@@ -44,7 +51,11 @@ class StackInCard extends LitElement implements LovelaceCard {
       this._card = card;
       this._waitForChildren(card, false);
       window.setTimeout(() => {
-        this._waitForChildren(card, true);
+        if (!this._config?.keep?.background) this._waitForChildren(card, true);
+        if (this._config?.keep?.margin && this._card?.shadowRoot) {
+          const stackRoot = this._card.shadowRoot.getElementById('root');
+          if (stackRoot) stackRoot.style.padding = '8px';
+        }
       }, 500);
     });
   }
@@ -63,8 +74,9 @@ class StackInCard extends LitElement implements LovelaceCard {
 
   private _updateStyle(e: LovelaceCard | null, withBg: boolean): void {
     if (!e) return;
-    e.style.boxShadow = 'none';
+    if (!this._config?.keep?.box_shadow) e.style.boxShadow = 'none';
     if (
+      !this._config?.keep?.background &&
       withBg &&
       getComputedStyle(e)
         .getPropertyValue('--keep-background')
@@ -72,13 +84,14 @@ class StackInCard extends LitElement implements LovelaceCard {
     ) {
       e.style.background = 'transparent';
     }
-    e.style.borderRadius = '0';
+    if (!this._config?.keep?.border_radius) e.style.borderRadius = '0';
   }
 
   private _loopChildren(e: LovelaceCard, withBg: boolean): void {
     const searchElements = e.childNodes;
     searchElements.forEach(childE => {
-      if ((childE as LovelaceCard).style) {
+      if ((childE as Element).tagName === 'STACK-IN-CARD') return;
+      if (!this._config?.keep?.margin && (childE as LovelaceCard).style) {
         (childE as LovelaceCard).style.margin = '0px';
       }
       this._waitForChildren(childE as LovelaceCard, withBg);
@@ -90,6 +103,7 @@ class StackInCard extends LitElement implements LovelaceCard {
     if (element.shadowRoot) {
       const card = element.shadowRoot.querySelector('ha-card') as LovelaceCard;
       if (!card) {
+        // if (element.shadowRoot.querySelector('stack-in-card')) return;
         const searchEles = element.shadowRoot.getElementById('root') || element.shadowRoot.getElementById('card');
         if (!searchEles) return;
         this._loopChildren(searchEles as LovelaceCard, withBg);
