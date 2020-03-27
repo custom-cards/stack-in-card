@@ -20,9 +20,15 @@
       "problemMatcher": []
     },
     {
-      "label": "Install a spesific version of Home Assistant",
+      "label": "Install a specific version of Home Assistant",
       "type": "shell",
       "command": "dc set-version",
+      "problemMatcher": []
+    },
+    {
+      "label": "Watch for file change and service the card on :5000",
+      "type": "npm",
+      "script": "start",
       "problemMatcher": []
     }
   ]
