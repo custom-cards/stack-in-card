@@ -22,6 +22,8 @@ class StackInCard extends LitElement implements LovelaceCard {
 
   @property() private _hass?: HomeAssistant;
 
+  private _initialized = false;
+
   set hass(hass: HomeAssistant) {
     this._hass = hass;
     if (this._card) {
@@ -54,25 +56,30 @@ class StackInCard extends LitElement implements LovelaceCard {
     };
     if (this._config.keep?.margin && this._config.keep?.outer_padding === undefined)
       this._config.keep.outer_padding = true;
-    this._createCard({
-      type: `${this._config.mode}-stack`,
-      cards: this._config.cards,
-    }).then(card => {
-      this._card = card;
-      this._waitForChildren(card, false);
-      window.setTimeout(() => {
-        if (!this._config?.keep?.background) this._waitForChildren(card, true);
-        if (this._config?.keep?.outer_padding && this._card?.shadowRoot) {
-          const stackRoot = this._card.shadowRoot.getElementById('root');
-          if (stackRoot) stackRoot.style.padding = '8px';
-        }
-      }, 500);
-    });
+    this._initialized = false;
   }
 
   protected render(): TemplateResult {
-    if (!this._hass || !this._card || !this._config) {
+    if (!this._hass || !this._config) {
       return html``;
+    }
+
+    if (!this._initialized) {
+      this._createCard({
+        type: `${this._config.mode}-stack`,
+        cards: this._config.cards,
+      }).then(card => {
+        this._card = card;
+        this._waitForChildren(card, false);
+        window.setTimeout(() => {
+          if (!this._config?.keep?.background) this._waitForChildren(card, true);
+          if (this._config?.keep?.outer_padding && this._card?.shadowRoot) {
+            const stackRoot = this._card.shadowRoot.getElementById('root');
+            if (stackRoot) stackRoot.style.padding = '8px';
+          }
+        }, 500);
+        this._initialized = true;
+      });
     }
 
     return html`
