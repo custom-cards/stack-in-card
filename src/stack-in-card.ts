@@ -1,4 +1,4 @@
-import { LitElement, customElement, property, TemplateResult, html, css, CSSResult } from 'lit-element';
+import { LitElement, customElement, property, TemplateResult, html, css, CSSResult, PropertyValues } from 'lit-element';
 import { ifDefined } from 'lit-html/directives/if-defined';
 import { HomeAssistant, LovelaceCardConfig, createThing, LovelaceCard } from 'custom-card-helpers';
 import { StackInCardConfig } from './types';
@@ -20,9 +20,9 @@ class StackInCard extends LitElement implements LovelaceCard {
 
   @property() private _config?: StackInCardConfig;
 
-  @property() private _hass?: HomeAssistant;
+  private _hass?: HomeAssistant;
 
-  private _initialized = false;
+  private _cardPromise: Promise<LovelaceCard> | undefined;
 
   set hass(hass: HomeAssistant) {
     this._hass = hass;
@@ -56,30 +56,34 @@ class StackInCard extends LitElement implements LovelaceCard {
     };
     if (this._config.keep?.margin && this._config.keep?.outer_padding === undefined)
       this._config.keep.outer_padding = true;
-    this._initialized = false;
+    this._createStack();
+  }
+
+  protected updated(changedProperties: PropertyValues): void {
+    super.updated(changedProperties);
+    if (!this._card) return;
+    this._waitForChildren(this._card, false);
+    window.setTimeout(() => {
+      if (!this._config?.keep?.background) this._waitForChildren(this._card, true);
+      if (this._config?.keep?.outer_padding && this._card?.shadowRoot) {
+        const stackRoot = this._card.shadowRoot.getElementById('root');
+        if (stackRoot) stackRoot.style.padding = '8px';
+      }
+    }, 500);
+  }
+
+  private async _createStack() {
+    this._cardPromise = this._createCard({
+      type: `${this._config!.mode}-stack`,
+      cards: this._config!.cards,
+    });
+
+    this._card = await this._cardPromise;
   }
 
   protected render(): TemplateResult {
     if (!this._hass || !this._config) {
       return html``;
-    }
-
-    if (!this._initialized) {
-      this._createCard({
-        type: `${this._config.mode}-stack`,
-        cards: this._config.cards,
-      }).then(card => {
-        this._card = card;
-        this._waitForChildren(card, false);
-        window.setTimeout(() => {
-          if (!this._config?.keep?.background) this._waitForChildren(card, true);
-          if (this._config?.keep?.outer_padding && this._card?.shadowRoot) {
-            const stackRoot = this._card.shadowRoot.getElementById('root');
-            if (stackRoot) stackRoot.style.padding = '8px';
-          }
-        }, 500);
-        this._initialized = true;
-      });
     }
 
     return html`
@@ -95,9 +99,7 @@ class StackInCard extends LitElement implements LovelaceCard {
     if (
       !this._config?.keep?.background &&
       withBg &&
-      getComputedStyle(e)
-        .getPropertyValue('--keep-background')
-        .trim() !== 'true'
+      getComputedStyle(e).getPropertyValue('--keep-background').trim() !== 'true'
     ) {
       e.style.background = 'transparent';
     }
@@ -106,7 +108,7 @@ class StackInCard extends LitElement implements LovelaceCard {
 
   private _loopChildren(e: LovelaceCard, withBg: boolean): void {
     const searchElements = e.childNodes;
-    searchElements.forEach(childE => {
+    searchElements.forEach((childE) => {
       if ((childE as Element).tagName === 'STACK-IN-CARD') return;
       if (!this._config?.keep?.margin && (childE as LovelaceCard).style) {
         (childE as LovelaceCard).style.margin = '0px';
@@ -158,7 +160,7 @@ class StackInCard extends LitElement implements LovelaceCard {
     if (element) {
       element.addEventListener(
         'll-rebuild',
-        ev => {
+        (ev) => {
           ev.stopPropagation();
           this._rebuildCard(element, config);
         },
@@ -182,7 +184,21 @@ class StackInCard extends LitElement implements LovelaceCard {
     return newCard;
   }
 
-  public getCardSize(): number {
-    return this._card && typeof this._card.getCardSize === 'function' ? this._card.getCardSize() : 1;
+  public async getCardSize(): Promise<number> {
+    await this._cardPromise;
+    if (!this._card) {
+      return 0;
+    }
+    return await this._computeCardSize(this._card);
+  }
+
+  private _computeCardSize(card: LovelaceCard): number | Promise<number> {
+    if (typeof card.getCardSize === 'function') {
+      return card.getCardSize();
+    }
+    if (customElements.get(card.localName)) {
+      return 1;
+    }
+    return customElements.whenDefined(card.localName).then(() => this._computeCardSize(card));
   }
 }

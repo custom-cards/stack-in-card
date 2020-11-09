@@ -84,3 +84,78 @@ views:
               - type: entities
                 entities:
                   - sun.sun
+      - type: custom:stack-in-card
+        title: My Stack In Card
+        mode: vertical
+        cards:
+          - type: horizontal-stack
+            cards:
+              - type: button
+                entity: sun.sun
+              - type: button
+                entity: sun.sun
+          - type: entities
+            style: |
+              ha-card {
+                --ha-card-background: rgb(255,100,182);
+                color: rgb(217,242,251);
+                --keep-background: true;
+              }
+            entities:
+              - type: divider
+          - type: vertical-stack
+            cards:
+              - type: entities
+                entities:
+                  - sun.sun
+
+      - type: custom:stack-in-card
+        title: My Stack In Card
+        mode: vertical
+        cards:
+          - type: horizontal-stack
+            cards:
+              - type: button
+                entity: sun.sun
+              - type: button
+                entity: sun.sun
+          - type: entities
+            style: |
+              ha-card {
+                --ha-card-background: rgb(255,100,182);
+                color: rgb(217,242,251);
+                --keep-background: true;
+              }
+            entities:
+              - type: divider
+          - type: vertical-stack
+            cards:
+              - type: entities
+                entities:
+                  - sun.sun
+
+      - type: custom:stack-in-card
+        title: My Stack In Card
+        mode: vertical
+        cards:
+          - type: horizontal-stack
+            cards:
+              - type: button
+                entity: sun.sun
+              - type: button
+                entity: sun.sun
+          - type: entities
+            style: |
+              ha-card {
+                --ha-card-background: rgb(255,100,182);
+                color: rgb(217,242,251);
+                --keep-background: true;
+              }
+            entities:
+              - type: divider
+          - type: vertical-stack
+            cards:
+              - type: entities
+                entities:
+                  - sun.sun
+
