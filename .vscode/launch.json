@@ -2,6 +2,15 @@
   "version": "0.1.0",
   "configurations": [
     {
+      "type": "chrome",
+      "request": "launch",
+      "name": "Chrome Localhost",
+      "url": "http://localhost:8123",
+      "webRoot": "${workspaceFolder}/dist",
+      "sourceMaps": true
+      // "runtimeExecutable": "/mnt/c/Program Files/Google/Chrome/Application/chrome.exe"
+    },
+    {
       "type": "browser-preview",
       "request": "attach",
       "name": "Browser Preview: Attach",
