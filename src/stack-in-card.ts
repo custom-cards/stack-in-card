@@ -34,7 +34,7 @@ class StackInCard extends LitElement implements LovelaceCard {
   static get styles(): CSSResult {
     return css`
       ha-card {
-        overflow: hidden;
+        overflow: visible;
       }
     `;
   }
