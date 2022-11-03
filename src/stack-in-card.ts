@@ -51,6 +51,7 @@ class StackInCard extends LitElement implements LovelaceCard {
         margin: false,
         box_shadow: false,
         border_radius: false,
+        border: false,
         ...config.keep,
       },
     };
@@ -104,6 +105,7 @@ class StackInCard extends LitElement implements LovelaceCard {
       e.style.background = 'transparent';
     }
     if (!this._config?.keep?.border_radius) e.style.borderRadius = '0';
+    if (!this._config?.keep?.border) e.style.border = 'none';
   }
 
   private _loopChildren(e: LovelaceCard, withBg: boolean): void {
