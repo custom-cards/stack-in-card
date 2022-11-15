@@ -97,7 +97,9 @@ class StackInCard extends LitElement implements LovelaceCard {
   private _updateStyle(e: LovelaceCard | null, withBg: boolean): void {
     if (!e) return;
     if (!this._config?.keep?.box_shadow) e.style.boxShadow = 'none';
-    if (!this._config?.keep?.border) e.style.border = 'none';
+    if (!this._config?.keep?.border && getComputedStyle(e).getPropertyValue('--keep-border').trim() !== 'true') {
+      e.style.border = 'none';
+    }
     if (
       !this._config?.keep?.background &&
       withBg &&
