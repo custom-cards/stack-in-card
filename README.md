@@ -61,6 +61,28 @@ If a card inside the stack has the `--keep-background` CSS style defined, it wil
             - sun.sun
 ```
 
+### Example with `keep` object
+
+```yaml
+type: custom:stack-in-card
+title: My Stack In Card
+mode: vertical
+keep:
+  background: true
+cards:
+  - type: horizontal-stack
+    cards:
+      - type: button
+        entity: sun.sun
+      - type: button
+        entity: sun.sun
+  - type: vertical-stack
+    cards:
+      - type: entities
+        entities:
+          - sun.sun
+```
+
 ### Example with button-card to keep the background
 
 This will keep the background of the button even if stacked:
