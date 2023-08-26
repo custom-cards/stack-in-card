@@ -10,6 +10,10 @@ console.info(
   'color: white; font-weight: bold; background: dimgray',
 );
 
+window.customElements.get('stack-in-card').getConfigElement = function() {
+  return document.createElement('hui-stack-card-editor');
+}
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const HELPERS = (window as any).loadCardHelpers ? (window as any).loadCardHelpers() : undefined;
 
