@@ -10,8 +10,14 @@ console.info(
   'color: white; font-weight: bold; background: dimgray',
 );
 
+
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const HELPERS = (window as any).loadCardHelpers ? (window as any).loadCardHelpers() : undefined;
+
+window.customElements.get('stack-in-card').getConfigElement = function() {
+  return document.createElement('hui-stack-card-editor');
+}
 
 @customElement('stack-in-card')
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
