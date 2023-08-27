@@ -18,9 +18,9 @@ jobs:
           yarn install
           npm run build
 
-      # Upload build file to the releas as an asset.
+      # Upload build file to the release as an asset.
       - name: Upload zip to release
-        uses: svenstaro/upload-release-action@v1-release
+        uses: lmendezr/upload-release-action@v1-release
 
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
