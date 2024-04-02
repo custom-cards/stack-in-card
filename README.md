@@ -1,3 +1,5 @@
+## Note: outdated, use https://github.com/stickpin/stack-in-card instead
+
 # Stack In Card by [@RomRider](https://www.github.com/RomRider)
 
 A replacement for [vertical-stack-in-card](https://github.com/ofekashery/vertical-stack-in-card) and `horizontal-stack-in-card`
@@ -34,6 +36,7 @@ If a card inside the stack has the `--keep-background` CSS style defined, it wil
 | `box_shadow` | boolean | **Optional** | Will keep the `box-shadow` on **all** the child cards | `false` |
 | `margin` | boolean | **Optional** | Will keep the `margin` between **all** the child cards | `false` |
 | `outer_padding` | boolean | **Optional** | Will add a `padding` of `8px` to the card if `margin` is `true` | `true` if `margin` is `true`, else false |
+| `border` | boolean | **Optional** | Will keep the `border` on **all** the child cards | `false` |
 | `border_radius` | boolean | **Optional** | Will keep the `border-radius` on **all** the child cards | `false` |
 
 ## Example
@@ -58,6 +61,28 @@ If a card inside the stack has the `--keep-background` CSS style defined, it wil
         - type: entities
           entities:
             - sun.sun
+```
+
+### Example with `keep` object
+
+```yaml
+type: custom:stack-in-card
+title: My Stack In Card
+mode: vertical
+keep:
+  background: true
+cards:
+  - type: horizontal-stack
+    cards:
+      - type: button
+        entity: sun.sun
+      - type: button
+        entity: sun.sun
+  - type: vertical-stack
+    cards:
+      - type: entities
+        entities:
+          - sun.sun
 ```
 
 ### Example with button-card to keep the background
