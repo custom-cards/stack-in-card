@@ -79,6 +79,11 @@ class StackInCard extends LitElement implements LovelaceCard {
     });
 
     this._card = await this._cardPromise;
+    // hass may have been set while the card was being created: _createCard
+    // checked this._hass before it arrived, and the hass setter found no
+    // this._card to forward it to. Without this the children stay blank until
+    // the next hass update.
+    if (this._hass) this._card.hass = this._hass;
   }
 
   protected render(): TemplateResult {
